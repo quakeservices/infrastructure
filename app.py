@@ -2,10 +2,10 @@
 
 from aws_cdk import core
 
-from infrastructure.infrastructure_stack import InfrastructureStack
+from domains.domain_stack import DomainStack
 
 
 app = core.App()
-InfrastructureStack(app, "infrastructure")
+DomainStack(app, "DomainStack")
 
 app.synth()
