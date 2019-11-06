@@ -7,7 +7,8 @@ class VPCStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
        
-        subnet_conf = [SubnetConfiguration(cidr_mask=24, name='public', subnet_type=SubnetType.PUBLIC)]
+        subnet_conf = list()
+        subnet_conf.append(SubnetConfiguration(cidr_mask=24, name='public', subnet_type=SubnetType.PUBLIC))
 
         vpc = Vpc(self, 'QuakeServicesVPC', 
                 cidr='172.16.0.0/16',
