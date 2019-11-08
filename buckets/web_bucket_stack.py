@@ -13,5 +13,6 @@ class WebBucketStack(core.Stack):
 
         for domain in domains:
             name = f'apex_301_{domain}'
-            s3.bucket(self, name,
-                website_redirect={'hostname_name': f'www.{domain}'})
+            s3.Bucket(self, name,
+                bucket_name=domain,
+                website_redirect=s3.RedirectTarget(host_name='www.quake.services'))
