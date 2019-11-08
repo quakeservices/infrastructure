@@ -8,8 +8,10 @@ class ECSStack(core.Stack):
   def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
        
+
         cluster = ecs.Cluster(self, 'QuakeServices',
-                cluster_name='QuakeServicesECS')
+                cluster_name='QuakeServicesECS',
+                vpc=ec2.Vpc.from_lookup(self, 'VPCStack'))
 
         cluster.add_capacity('DefaultAutoScalingGroupCapacity',
                 instance_type=ec2.InstanceType('t3.micro'),
