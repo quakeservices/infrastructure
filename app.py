@@ -11,15 +11,15 @@ from buckets.web_bucket_stack import WebBucketStack
 
 app = core.App()
 
-global_route53 = DomainStack(app, "DomainStack", env=us_west_2_env)
-
 us_west_2 = dict()
 us_west_2['env'] = {'account': os.getenv('AWS_ACCOUNT', os.getenv('CDK_DEFAULT_ACCOUNT', '')),
                     'region': os.getenv('AWS_DEFAULT_REGION', os.getenv('CDK_DEFAULT_REGION', ''))}
 
+global_route53 = DomainStack(app, "DomainStack", env=us_west_2['env'])
+
 us_west_2['vpc'] = VPCStack(app, "VPCStack", env=us_west_2['env'])
 us_west_2['ecr'] = ECRStack(app, "ECRStack", env=us_west_2['env'])
-us_west_2['ecs'] = ECSStack(app, "ECSStack", env=us_west_2['env'], vpc=us_west_2['vpc'])
+us_west_2['ecs'] = ECSStack(app, "ECSStack", env=us_west_2['env'])
 us_west_2['web_bucket_stack'] = WebBucketStack(app, "WebBucketStack", env=us_west_2['env'])
 
 app.synth()
