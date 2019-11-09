@@ -5,17 +5,21 @@ import aws_cdk.aws_ec2 as ec2
 
 class ECSStack(core.Stack):
 
-  def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
        
+        vpc = ec2.Vpc.from_lookup(self,
+                                  'QuakeServicesVPC',
+                                  vpc_name='VPCStack/QuakeServicesVPC')
+
 
         cluster = ecs.Cluster(self, 'QuakeServices',
                 cluster_name='QuakeServicesECS',
-                vpc=ec2.Vpc.from_lookup(self, 'VPCStack'))
+                vpc=vpc)
 
         cluster.add_capacity('DefaultAutoScalingGroupCapacity',
                 instance_type=ec2.InstanceType('t3.micro'),
-                desired_capacity=3,
+                desired_capacity=2,
                 max_capacity=6,
                 min_capacity=2)
 
