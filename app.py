@@ -19,7 +19,11 @@ global_route53 = DomainStack(app, "DomainStack", env=us_west_2['env'])
 
 us_west_2['vpc'] = VPCStack(app, "VPCStack", env=us_west_2['env'])
 us_west_2['ecr'] = ECRStack(app, "ECRStack", env=us_west_2['env'])
+
 us_west_2['ecs'] = ECSStack(app, "ECSStack", env=us_west_2['env'])
+us_west_2['nlb'] = NLBStack(app, "NLBStack", env=us_west_2['env'])
+us_west_2['master'] = MasterTaskStack(app, "MasterTaskStack", env=us_west_2['env'])
+
 us_west_2['web_bucket_stack'] = WebBucketStack(app, "WebBucketStack", env=us_west_2['env'])
 
 app.synth()
