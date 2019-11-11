@@ -11,6 +11,9 @@ class WebBucketStack(core.Stack):
                    'quake2.services',
                    'quake3.services']
 
+        s3.Bucket(self, 'www.quake.services',
+            bucket_name='www.quake.services')
+
         for domain in domains:
             name = f'apex_301_{domain}'
             s3.Bucket(self, name,
