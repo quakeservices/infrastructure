@@ -6,6 +6,8 @@ from domains.domain_stack import DomainStack
 from vpcs.vpc_stack import VPCStack
 from containers.ecr_stack import ECRStack
 from containers.ecs_stack import ECSStack
+from containers.master_task_stack import MasterTaskStack
+from nlb.nlb_stack import NLBStack
 from buckets.web_bucket_stack import WebBucketStack
 
 
@@ -20,9 +22,17 @@ global_route53 = DomainStack(app, "DomainStack", env=us_west_2['env'])
 us_west_2['vpc'] = VPCStack(app, "VPCStack", env=us_west_2['env'])
 us_west_2['ecr'] = ECRStack(app, "ECRStack", env=us_west_2['env'])
 
-us_west_2['ecs'] = ECSStack(app, "ECSStack", env=us_west_2['env'])
-us_west_2['nlb'] = NLBStack(app, "NLBStack", env=us_west_2['env'])
-us_west_2['master'] = MasterTaskStack(app, "MasterTaskStack", env=us_west_2['env'])
+us_west_2['ecs'] = ECSStack(app, "ECSStack", 
+                            env=us_west_2['env'],
+                            vpc=us_west_2['vpc'].vpc)
+
+us_west_2['nlb'] = NLBStack(app, "NLBStack",
+                            env=us_west_2['env'],
+                            vpc=us_west_2['vpc'].vpc)
+
+us_west_2['master'] = MasterTaskStack(app, "MasterTaskStack",
+                                      env=us_west_2['env'],
+                                      cluster=us_west_2['ecs'].cluster)
 
 us_west_2['web_bucket_stack'] = WebBucketStack(app, "WebBucketStack", env=us_west_2['env'])
 

@@ -10,8 +10,8 @@ class VPCStack(core.Stack):
         subnet_conf = list()
         subnet_conf.append(SubnetConfiguration(cidr_mask=24, name='public', subnet_type=SubnetType.PUBLIC))
 
-        vpc = Vpc(self, 'QuakeServicesVPC', 
-                cidr='172.16.0.0/16',
-                nat_gateways=0,
-                subnet_configuration=subnet_conf)
+        self.vpc = Vpc(self, 'QuakeServicesVPC', 
+                       cidr='172.16.0.0/16',
+                       nat_gateways=0,
+                       subnet_configuration=subnet_conf)
 

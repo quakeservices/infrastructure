@@ -7,31 +7,28 @@ import aws_cdk.aws_autoscaling as autoscaling
 
 class NLBStack(core.Stack):
 
-  def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+  def __init__(self, scope: core.Construct, id: str, vpc: ec2.Vpc, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
      
         master_port = 27900
-        master_check = 8080
-
-        vpc = ec2.Vpc.from_lookup(self,
-                                  'QuakeServicesVPC',
-                                  vpc_name='VPCStack/QuakeServicesVPC')
+        master_check = '8080'
+    
+        self.vpc = vpc
 
         lb = elb.NetworkLoadBalancer(self, 'QuakeServicesNLB',
-            vpc=vpc,
+            vpc=self.vpc,
             internet_facing=True,
-            cross_zone_enable=True)
+            cross_zone_enabled=True)
 
         listener = lb.add_listener('Listener',
             port=master_port,
             protocol=elb.Protocol.UDP)
 
-        health_check = elb.HealthCheck('HealthCheck', 
-            healthy_http_codes='200',
-            port=master_check,
-            protocol=elb.Protocol.HTTP)
-
         listener.add_targets('Target',
             port=master_port,
             proxy_protocol_v2=True,
-            health_check=health_check)
+            health_check={
+                'healthy_http_codes': '200',
+                'port':  master_check,
+                'protocol': elb.Protocol.HTTP})
+

@@ -1,29 +1,21 @@
 from aws_cdk import core
 import aws_cdk.aws_ecs as ecs
-import aws_cdk.aws_ec2 as ec2
 
 
 class MasterTaskStack(core.Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+  def __init__(self, scope: core.Construct, id: str, cluster: ecs.Cluster, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
        
-        vpc = ec2.Vpc.from_lookup(self,
-                                  'QuakeServicesVPC',
-                                  vpc_name='VPCStack/QuakeServicesVPC')
-
-
-        cluster = ecs.from_cluster_attributes(self, 'QuakeServices',
-                cluster_name='QuakeServicesECS',
-                vpc=vpc)
+        self.cluster = cluster
 
         task = ecs.Ec2TaskDefinition(self, 'QuakeMasterTask',
-            network_mode=ecs.NetworkMode.HOST,
-            compatibility=ecs.Compatibility.EC2)
+            network_mode=ecs.NetworkMode.HOST)
 
         task.add_container('Master',
-            image='TBD')
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            memory_reservation_mib=256)
 
         service = ecs.Ec2Service(self, 'QuakeMasterService',
-            cluster=cluster,
+            cluster=self.cluster,
             task_definition=task)
