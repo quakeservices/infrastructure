@@ -22,6 +22,7 @@ class VPCStack(core.Stack):
         self.vpc.add_dynamo_db_endpoint('dynamo-endpoint',
                                         subnets=[subnet_private])
 
+        """
         self.vpc.add_gateway_endpoint('ecr-endpoint',
                                       service=GatewayVpcEndpointAwsService('ecr-service', prefix='ecr'),
                                       subnets=[subnet_private])
@@ -29,4 +30,4 @@ class VPCStack(core.Stack):
         self.vpc.add_gateway_endpoint('ecs-endpoint',
                                       service=GatewayVpcEndpointAwsService('ecs-service', prefix='ecs'),
                                       subnets=[subnet_private])
-
+        """
