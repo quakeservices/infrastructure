@@ -17,7 +17,6 @@ class DomainStack(core.Stack):
         domains = [primary_domain] + secondary_domains
 
         subject_alt = secondary_domains + ['*.' + x for x in domains]
-        print(subject_alt)
 
         zones = dict()
         for domain in domains:
