@@ -5,10 +5,6 @@ from aws_cdk import core
 from domains.domain_stack import DomainStack
 from vpcs.vpc_stack import VPCStack
 from containers.ecr_stack import ECRStack
-from containers.ecs_stack import ECSStack
-from containers.master_task_stack import MasterTaskStack
-from nlb.nlb_stack import NLBStack
-from buckets.web_bucket_stack import WebBucketStack
 
 
 app = core.App()
