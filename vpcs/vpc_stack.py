@@ -17,11 +17,15 @@ class VPCStack(core.Stack):
                        max_azs=3,
                        subnet_configuration=subnet_conf)
 
-        self.vpc.add_s3_endpoint('s3-endpoint', 
-                                 subnets=[subnet_private])
+        self.vpc.add_gateway_endpoint(
+                's3-endpoint',
+                service=GatewayVpcEndpointAwsService('s3'))
 
-        self.vpc.add_dynamo_db_endpoint('dynamo-endpoint',
-                                        subnets=[subnet_private])
+        self.vpc.add_gateway_endpoint(
+                'dynamo-endpoint',
+                service=GatewayVpcEndpointAwsService('dynamodb'))
+
+        self.vpc.add_flow_log("FlowLog")
 
         """
         self.vpc.add_gateway_endpoint('ecr-endpoint',
