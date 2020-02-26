@@ -27,7 +27,7 @@ class VPCStack(core.Stack):
                 service=ec2.GatewayVpcEndpointAwsService('dynamodb'))
 
         self.vpc.add_flow_log(
-                "QuakeServicesVPCFlowLog",
+                "FlowLog",
                 log_group_options=logs.LogGroupProps(
                     removal_policy=core.RemovalPolicy.DESTROY,
                     retention=logs.RetentionDays.TWO_WEEKS)
