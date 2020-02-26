@@ -1,5 +1,6 @@
 from aws_cdk import core
 import aws_cdk.aws_ec2 as ec2
+import aws_cdk.aws_logs as logs
 
 
 class VPCStack(core.Stack):
@@ -25,7 +26,12 @@ class VPCStack(core.Stack):
                 'dynamo-endpoint',
                 service=ec2.GatewayVpcEndpointAwsService('dynamodb'))
 
-        self.vpc.add_flow_log("FlowLog")
+        self.vpc.add_flow_log(
+                "QuakeServicesVPCFlowLog",
+                log_group_options=logs.LogGroupProps(
+                    removal_policy=core.RemovalPolicy.DESTROY,
+                    retention=logs.RetentionDays.TWO_WEEKS)
+        )
 
         """
         self.vpc.add_gateway_endpoint('ecr-endpoint',
