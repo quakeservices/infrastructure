@@ -7,5 +7,12 @@ class ECRStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        repo = ecr.Repository(self, 'quakeservices')
+        repository = ecr.Repository(
+            self,
+            'quakeservices',
+        )
+
+        repository.add_lifecycle_rule(
+            max_image_count=10
+        )
 

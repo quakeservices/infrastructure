@@ -3,19 +3,47 @@ import os
 from aws_cdk import core
 
 from domains.domain_stack import DomainStack
-from vpcs.vpc_stack import VPCStack
+from certificates.certificate_stack import CertificateStack
 from containers.ecr_stack import ECRStack
 
 
 app = core.App()
 
-us_west_2 = dict()
-us_west_2['env'] = {'account': os.getenv('AWS_ACCOUNT', os.getenv('CDK_DEFAULT_ACCOUNT', '')),
-                    'region': os.getenv('AWS_DEFAULT_REGION', os.getenv('CDK_DEFAULT_REGION', ''))}
+ap_southeast_2 = dict()
+ap_southeast_2['env'] = {
+    'account': os.getenv('AWS_ACCOUNT', os.getenv('CDK_DEFAULT_ACCOUNT', '')),
+    'region': os.getenv('AWS_DEFAULT_REGION', os.getenv('CDK_DEFAULT_REGION', ''))
+}
 
-global_route53 = DomainStack(app, "DomainStack", env=us_west_2['env'])
+stack_name = "QuakeServices"
 
-us_west_2['vpc'] = VPCStack(app, "VPCStack", env=us_west_2['env'])
-us_west_2['ecr'] = ECRStack(app, "ECRStack", env=us_west_2['env'])
+domains = [
+    {'domain': 'quake.services',  'wildcard': '*.quake.services', 'primary': True},
+    {'domain': 'quake2.services', 'wildcard': '*.quake2.services', 'primary': False},
+    {'domain': 'quake3.services', 'wildcard': '*.quake3.services', 'primary': False}
+]
+
+global_route53 = DomainStack(
+    app,
+    stack_name + "Domains",
+    stack_name=stack_name,
+    domains=domains,
+    env=ap_southeast_2['env']
+)
+
+certificates = CertificateStack(
+    app,
+    stack_name + "Certificates",
+    stack_name=stack_name,
+    domains=domains,
+    env=ap_southeast_2['env']
+)
+    
+ecr = ECRStack(
+    app,
+    stack_name + "ECR",
+    stack_name=stack_name,
+    env=ap_southeast_2['env']
+)
 
 app.synth()
