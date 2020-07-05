@@ -7,6 +7,7 @@ class DomainStack(core.Stack):
     def __init__(self,
                  scope: core.Construct,
                  id: str,
+                 prefix: str,
                  domains: dict,
                  **kwargs) -> None:
 

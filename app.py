@@ -15,7 +15,7 @@ ap_southeast_2['env'] = {
     'region': os.getenv('AWS_DEFAULT_REGION', os.getenv('CDK_DEFAULT_REGION', ''))
 }
 
-stack_name = "QuakeServices"
+stack_prefix = "QuakeServices"
 
 domains = [
     {'domain': 'quake.services',  'wildcard': '*.quake.services', 'primary': True},
@@ -25,24 +25,24 @@ domains = [
 
 global_route53 = DomainStack(
     app,
-    stack_name + "Domains",
-    stack_name=stack_name,
+    stack_prefix + "Domains",
+    prefix=stack_prefix,
     domains=domains,
     env=ap_southeast_2['env']
 )
 
 certificates = CertificateStack(
     app,
-    stack_name + "Certificates",
-    stack_name=stack_name,
+    stack_prefix + "Certificates",
+    prefix=stack_prefix,
     domains=domains,
     env=ap_southeast_2['env']
 )
     
 ecr = ECRStack(
     app,
-    stack_name + "ECR",
-    stack_name=stack_name,
+    stack_prefix + "ECR",
+    prefix=stack_prefix,
     env=ap_southeast_2['env']
 )
 

@@ -8,7 +8,7 @@ class CertificateStack(core.Stack):
     def __init__(self,
                  scope: core.Construct,
                  id: str,
-                 stack_name: str,
+                 prefix: str,
                  domains: dict,
                  **kwargs) -> None:
 
@@ -25,7 +25,7 @@ class CertificateStack(core.Stack):
         for region in regions:
             certificate = certificatemanager.DnsValidatedCertificate(
                 self,
-                stack_name + '_wildcard_' + region,
+                prefix + '_wildcard_' + region,
                 hosted_zone=primary_zone,
                 region=region,
                 domain_name=primary_domain,
