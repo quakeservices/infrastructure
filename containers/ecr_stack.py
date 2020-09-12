@@ -12,12 +12,25 @@ class ECRStack(core.Stack):
 
         super().__init__(scope, id, **kwargs)
 
+        repos = [
+            {'name': 'master', 'removal_policy': core.RemovalPolicy.DESTROY}
+        ]
+
+        for repo in repos:
+            self.create_repo(name=repo['name'],
+                             removal_policy=repo['removal_policy'])
+
+    def create_repo(self,
+                    name: str,
+                    removal_policy,
+                    image_count: int = 3):
+        repo_name = '_'.join(['quakeservices', name])
+
         repository = ecr.Repository(
             self,
-            'quakeservices',
+            repo_name,
+            repository_name=repo_name,
+            removal_policy=removal_policy
         )
 
-        repository.add_lifecycle_rule(
-            max_image_count=10
-        )
-
+        repository.add_lifecycle_rule(max_image_count=image_count)
